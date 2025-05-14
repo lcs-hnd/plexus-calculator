@@ -1,3 +1,54 @@
-body {
-    background-color: black;
+/* @keyframes gradientAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+} */
+
+html, body {
+    background-color: rgb(40, 30, 30);
+
+    /* body takes entire viewport */
+    height: 100%;
+    margin: 0;
+
+    /* centering the calculator on the page */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.calculator-body {
+    background-color: rgba(0, 0, 0, 0.547);
+    border-radius: 12px;
+    padding: 20px;
+
+    /* controlling the vertical stack */
+    display: flex;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.button-grid button:hover {
+    background-color: #484848;
+}
+
+.button-grid button {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(245, 242, 237, 0.916);
+    border: none;
+    border-radius: 6px;
+    transition: background 0.2s ease-out;
+
+    /* button font properties */
+    font-size: 42px;
+}
+
+
