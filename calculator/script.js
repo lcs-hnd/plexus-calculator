@@ -23,3 +23,17 @@ function valueHolders(){
         return "WIP"
     }
 }
+
+// numpad and operator entry sfx
+
+const calculatorButtons = document.querySelectorAll('.button-grid button');
+const entryClick = document.getElementById('calculatorClick');
+
+calculatorButtons.forEach(btn => {
+    btn.addEventListener('onclick', () => {
+        entryClick.currentTime = 0;
+        entryClick.play();
+    });
+});
+
+// resolve entry sfx
