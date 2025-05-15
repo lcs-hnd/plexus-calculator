@@ -30,9 +30,13 @@ const calculatorButtons = document.querySelectorAll('.button-grid button');
 const entryClick = document.getElementById('calculatorClick');
 
 calculatorButtons.forEach(btn => {
-    btn.addEventListener('onclick', () => {
+    btn.addEventListener('click', () => {
         entryClick.currentTime = 0;
         entryClick.play();
+        particles.forEach(p => {
+              p.vx += (Math.random() - 0.5) * 1.2;
+              p.vy += (Math.random() - 0.5) * 1.2;
+            });         
     });
 });
 
@@ -71,15 +75,45 @@ function plexusAnimation() {
         p1.x += p1.vx; // moving particles according to their velocities
         p1.y += p1.vy;
 
-        if (p1.x < 0 || p1.x > canvas.width) p1.vx *= -1; // checks particle position to make sure it's not off the viewport
-        if (p1.y < 0 || p1.y > canvas.height) p1.vy *= -1; // the velocity multiplier can be reduced from -1 to simulate kinetic energy loss
+        if (p1.x < 0) {
+            p1.x = 0;
+            p1.vx *= -0.8;
+        } else if (p1.x > canvas.width) {
+            p1.x = canvas.width;
+            p1.vx *= -0.8;
+        }
 
-        particles.forEach(p2 => {
+        if (p1.y < 0) {
+            p1.y = 0;
+            p1.vy *= -0.8;
+        } else if (p1.y > canvas.height) {
+            p1.y = canvas.height;
+            p1.vy *= -0.8;
+        }
+
+        particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
             const dx = p1.x - p2.x;
             const dy = p1.y - p2.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
+            const dist = Math.sqrt(dx*dx + dy*dy); // euclidean distance formula
 
+            if (dist < 100) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 100})`;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
         });
 
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, 2, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
+        ctx.fill();
     });
+
+    requestAnimationFrame(plexusAnimation);
 }
+
+plexusAnimation();
+
+

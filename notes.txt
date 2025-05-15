@@ -1,0 +1,4 @@
+jotting down ideas here
+
+// add 404 easter egg
+    - transition from static to the no signal tv
