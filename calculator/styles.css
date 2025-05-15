@@ -36,19 +36,32 @@ html, body {
 }
 
 .button-grid button:hover {
-    background-color: #484848;
+    background-color: #48484825;
+}
+
+.button-grid button:active {
+    /* mimicks button being pressed */
+    background-color: #aaa2a2;
+    transform: scale(0.8);
 }
 
 .button-grid button {
     padding: 20px;
     background-color: rgba(0, 0, 0, 0);
     color: rgba(245, 242, 237, 0.916);
+    cursor: pointer;
+
+    /* rounding out the invisible button edges */
     border: none;
     border-radius: 6px;
-    transition: background 0.2s ease-out;
+
+    /* all background and click transitions */
+    transition: background 0.2s ease-out, transform .1s ease-out;
 
     /* button font properties */
     font-size: 42px;
 }
+
+
 
 
