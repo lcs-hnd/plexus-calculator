@@ -36,4 +36,9 @@ calculatorButtons.forEach(btn => {
     });
 });
 
+// background-video
+
+const video = document.getElementById('background-video');
+video.playbackRate = 0.7;
+
 // resolve entry sfx
