@@ -26,21 +26,38 @@ function valueHolders(){
 
 // numpad and operator entry sfx
 
-const calculatorButtons = document.querySelectorAll('.button-grid button');
+const calculatorButtons = document.querySelectorAll('.button-grid .numbers-and-operators');
+const equalsButton = document.getElementById('button-zero');
+const clearButton = document.getElementById('display-clear');
+
 const entryClick = document.getElementById('calculatorClick');
 
 calculatorButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         entryClick.currentTime = 0;
         entryClick.play();
-        particles.forEach(p => {
+
+        particles.forEach(p => { // 
               p.vx += (Math.random() - 0.5) * 1.2;
               p.vy += (Math.random() - 0.5) * 1.2;
             });         
     });
 });
 
-// background-video
+equalsButton.addEventListener('click', () => {
+    displaySolved.currentTime = 0;
+    displaySolved.play();
+
+    // particle logic when solved
+});
+
+clearButton.addEventListener('click', () => {
+    displayClear.currentTime = 0;
+    displayClear.play();
+
+    // particle logic when cleared
+    
+});
 
 // const video = document.getElementById('background-video');
 // video.playbackRate = 0.7;
@@ -60,7 +77,7 @@ window.addEventListener('resize', () => { // uses window global object to resize
 
 let particles = []; // array for the particles
 
-for (let i = 0; i < Math.floor(window.innerWidth/10); i++) { // variable particle count based on canvas width, might change it to base around both height and width
+for (let i = 0; i < Math.floor(((window.innerHeight + window.innerWidth) / 2 ) /10); i++) { // variable particle count based on canvas width, might change it to base around both height and width
     particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -78,10 +95,13 @@ function plexusAnimation() {
         if (p1.x < 0) {
             p1.x = 0;
             p1.vx *= -0.8;
-        } else if (p1.x > canvas.width) {
+        } else if (p1.x > canvas.width) { 
             p1.x = canvas.width;
             p1.vx *= -0.8;
-        }
+        } // both of the the if conditions to determine the edge of the viewport could lead to a 'sticking'
+        // phenomenom due to the position timings when the part is begin redirected with a negative sub 0 value
+        // instead i had to opt to update their positoin by brute force first and move them into the area they are allowed to be in
+
 
         if (p1.y < 0) {
             p1.y = 0;

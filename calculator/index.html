@@ -15,36 +15,37 @@
         <div class="calculator-display">
         </div>
         <div class="button-grid">
-            <button>AC</button>
-            <button>+/-</button>
-            <button>%</button>
-            <button>÷</button>
-           
+            <button id="display-clear">AC</button>
+            <button class="numbers-and-operators">+/-</button>
+            <button class="numbers-and-operators">%</button>
+            <button class="numbers-and-operators">÷</button>
+            
+            <button class="numbers-and-operators">7</button>
+            <button class="numbers-and-operators">8</button>
+            <button class="numbers-and-operators">9</button>
+            <button class="numbers-and-operators">x</button>
 
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button>x</button>
+            <button class="numbers-and-operators">4</button>
+            <button class="numbers-and-operators">5</button>
+            <button class="numbers-and-operators">6</button>
+            <button class="numbers-and-operators">-</button>
 
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>-</button>
-
-
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>+</button>
-
-            <button>0</button>
-            <button>.</button>
+            <button class="numbers-and-operators">1</button>
+            <button class="numbers-and-operators">2</button>
+            <button class="numbers-and-operators">3</button>
+            <button class="numbers-and-operators">+</button>
+            
+            <button class="numbers-and-operators">0</button>
+            <button class="numbers-and-operators">.</button>
             <button id="button-zero">=</button>
             
         </div>
     </div>
 
     <audio id="calculatorClick" src="./sound-fx/entry-sfx.mp3" preload="auto"></audio>
+    <audio id="displaySolved" src="./sound-fx/display-solved.wav"></audio>
+    <audio id="displayClear" src="./sound-fx/display-clear.mp3"></audio>
+    
     <script src ="script.js"></script>
 </body>
 </html>
