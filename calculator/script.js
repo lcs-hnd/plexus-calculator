@@ -82,14 +82,19 @@ for (let i = 0; i < Math.floor(((window.innerHeight * window.innerWidth) * 0.000
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.5, // -0.5 to 0.5 halved for random velocity
-        vy: (Math.random() - 0.5) * 0.5
+        vy: (Math.random() - 0.5) * 0.5,
+        opacity: 0,
+        targetOpacity: 1,
+        fadeSpeed: 0.001
     });
 };
 
+const connectionDelay = 5000;
+const connectionStartTime = Date.now();
+
 function plexusAnimation() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // clears canvas to prevent trailing
-    particles.forEach(p1 => {
-        p1.x += p1.vx; // moving particles according to their velocities
+    particles.forEach(p1 => {        p1.x += p1.vx; // moving particles according to their velocities
         p1.y += p1.vy;
 
         if (p1.x < 0) {
@@ -111,7 +116,16 @@ function plexusAnimation() {
             p1.vy *= -0.8;
         }
 
-        particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
+        if (p1.opacity != p1.targetOpacity) {
+            const delta = p1.targetOpacity - p1.opacity;
+            p1.opacity += p1.targetOpacity * p1.fadeSpeed;
+            p1.opacity = Math.max(0, Math.min(1, p1.opacity));
+        }
+
+        
+
+        if (Date.now() - connectionStartTime > connectionDelay) {
+            particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
             const dx = p1.x - p2.x;
             const dy = p1.y - p2.y;
             const dist = Math.sqrt(dx*dx + dy*dy); // euclidean distance formula
@@ -125,9 +139,11 @@ function plexusAnimation() {
                 ctx.lineTo(p2.x, p2.y);
                 ctx.stroke();
             }
-        });
+            });
+        }
+        
 
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = `rgba(255, 255, 255, ${p1.opacity})`;
         ctx.beginPath();
         ctx.arc(p1.x, p1.y, 2, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
         ctx.fill();
@@ -138,25 +154,30 @@ function plexusAnimation() {
 
 plexusAnimation();
 
+const thanosSnap = document.getElementById('display-clear');
 
-// AC Code
+// i was going to implement a singularity on the AC point and add in an orbit for the particles but i realized
+// that i need to finish this project first lol
+// i'll pick this up right after in a separate repo where i can expose the variables into a proper simulator
 
-let center = { x: canvas.width / 2, y: canvas.height / 2 };
-let angle = Math.atan2(p.y - center.y, p.x - center.x);
-let speed = 0.5;
+// // AC Code
 
-p.vx += Math.cos(angle) * speed * Math.random();
-p.vx += Math.sin(angle) * speed * Math.random();
+// let center = { x: canvas.width / 2, y: canvas.height / 2 };
+// let angle = Math.atan2(p.y - center.y, p.x - center.x);
+// let speed = 0.5;
+
+// p.vx += Math.cos(angle) * speed * Math.random();
+// p.vx += Math.sin(angle) * speed * Math.random();
 
 
-// Death by singularity
+// // Death by singularity
 
-const singularity = document.getElementById('display-clear');
-const singularityRect = singularity.getBoundingClientRect();
-const singularityCenter = {
-    x: singularityRect.left + singularityRect.width / 2, 
-    y: singularityRect.top + singularityRect.height /2
-};
+// const singularity = document.getElementById('display-clear');
+// const singularityRect = singularity.getBoundingClientRect();
+// const singularityCenter = {
+//     x: singularityRect.left + singularityRect.width / 2, 
+//     y: singularityRect.top + singularityRect.height /2
+// };
 
 
 
