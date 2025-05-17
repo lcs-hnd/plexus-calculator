@@ -55,12 +55,12 @@ im not sure how to take into account the text size itself*/
 .button-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* gap: 2px; */
+    gap: 4px;
     border-radius: 6px;
 }
 
 .button-grid button:hover {
-    background-color: #48484825;
+    background-color: #48484800;
 }
 
 .button-grid button:active {
@@ -71,13 +71,13 @@ im not sure how to take into account the text size itself*/
 
 .button-grid button {
     padding: 10px;
-    background-color: rgba(59, 57, 57, 0);
+    background-color: rgba(59, 57, 57, 0.533);
     color: rgba(245, 242, 237, 0.916);
     cursor: pointer;
 
     /* rounding out the invisible button edges */
     border: none;
-    border-radius: 6px;
+    border-radius: 1px;
 
     /* all background and click transitions */
     transition: background 0.4s ease-out, transform .05s ease-out;

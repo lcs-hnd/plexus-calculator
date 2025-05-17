@@ -77,7 +77,7 @@ window.addEventListener('resize', () => { // uses window global object to resize
 
 let particles = []; // array for the particles
 
-for (let i = 0; i < Math.floor(((window.innerHeight + window.innerWidth) / 2 ) /10); i++) { // variable particle count based on canvas width, might change it to base around both height and width
+for (let i = 0; i < Math.floor(((window.innerHeight * window.innerWidth) * 0.0001 )); i++) { // variable particle count based on canvas width
     particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -116,8 +116,10 @@ function plexusAnimation() {
             const dy = p1.y - p2.y;
             const dist = Math.sqrt(dx*dx + dy*dy); // euclidean distance formula
 
-            if (dist < 100) {
-                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 100})`;
+            let maxDistance = 138;
+
+            if (dist < maxDistance) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / maxDistance})`;
                 ctx.beginPath();
                 ctx.moveTo(p1.x, p1.y);
                 ctx.lineTo(p2.x, p2.y);
@@ -135,5 +137,27 @@ function plexusAnimation() {
 }
 
 plexusAnimation();
+
+
+// AC Code
+
+let center = { x: canvas.width / 2, y: canvas.height / 2 };
+let angle = Math.atan2(p.y - center.y, p.x - center.x);
+let speed = 0.5;
+
+p.vx += Math.cos(angle) * speed * Math.random();
+p.vx += Math.sin(angle) * speed * Math.random();
+
+
+// Death by singularity
+
+const singularity = document.getElementById('display-clear');
+const singularityRect = singularity.getBoundingClientRect();
+const singularityCenter = {
+    x: singularityRect.left + singularityRect.width / 2, 
+    y: singularityRect.top + singularityRect.height /2
+};
+
+
 
 
