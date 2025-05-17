@@ -38,8 +38,8 @@ calculatorButtons.forEach(btn => {
         entryClick.play();
 
         particles.forEach(p => { // 
-              p.vx += (Math.random() - 0.5) * 1.2;
-              p.vy += (Math.random() - 0.5) * 1.2;
+              p.vx += (Math.random() - 0.5) * 1.1;
+              p.vy += (Math.random() - 0.5) * 1.1;
             });         
     });
 });
@@ -62,7 +62,7 @@ clearButton.addEventListener('click', () => {
 // const video = document.getElementById('background-video');
 // video.playbackRate = 0.7;
 
-// plexus animation, leaving more comments than usual since it's my first time making one
+// plexus animation, leaving more comments than usual
 
 const canvas = document.getElementById('plexus'); // grabbing the html element
 canvas.width = window.innerWidth;
@@ -75,34 +75,61 @@ window.addEventListener('resize', () => { // uses window global object to resize
     canvas.height=window.innerHeight;
 });
 
-let particles = []; // array for the particles
+let particleCountMultiplier = 0.0002;
 
-for (let i = 0; i < Math.floor(((window.innerHeight * window.innerWidth) * 0.0001 )); i++) { // variable particle count based on canvas width
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5, // -0.5 to 0.5 halved for random velocity
-        vy: (Math.random() - 0.5) * 0.5,
-        opacity: 0,
-        targetOpacity: 1,
-        fadeSpeed: 0.001
-    });
-};
+function particleRegeneration() {
+    let particleCount = Math.floor(((window.innerHeight * window.innerWidth) * particleCountMultiplier));
+    particles = []; // array for the particles
 
-const connectionDelay = 5000;
-const connectionStartTime = Date.now();
+    for (let i = 0; i < particleCount ; i++) { // variable particle count based on canvas width
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5, // -0.5 to 0.5 halved for random velocity,
+            vy: (Math.random() - 0.5) * 0.5,
+            // bottom three not used atm
+            opacity: 1,
+            targetOpacity: 1, 
+            fadeSpeed: 0.001
+        });
+    };
+}
+
+document.getElementById('display-clear').addEventListener('click', () => {
+    particleCountMultiplier -= 0.00005;
+    fadeOverlayOpacity = 1;
+    particleRegeneration();
+});
+
+document.getElementById('button-zero').addEventListener('click', () => {
+    particleCountMultiplier += 0.00005;
+    fadeOverlayOpacity = 1;
+    particleRegeneration();
+});
+
+particleRegeneration();
+
+const calculatorDimensions = document.querySelector('.calculator-display');
+const calculatorBoundaries = calculatorDimensions.getBoundingClientRect();
+
+
+let fadeOverlayOpacity = 1;
+const fadeSpeed = 0.001;
 
 function plexusAnimation() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // clears canvas to prevent trailing
-    particles.forEach(p1 => {        p1.x += p1.vx; // moving particles according to their velocities
+
+
+    particles.forEach(p1 => {        
+        p1.x += p1.vx; // moving particles according to their velocities
         p1.y += p1.vy;
 
         if (p1.x < 0) {
             p1.x = 0;
-            p1.vx *= -0.8;
+            p1.vx *= -0.75;
         } else if (p1.x > canvas.width) { 
             p1.x = canvas.width;
-            p1.vx *= -0.8;
+            p1.vx *= -0.75;
         } // both of the the if conditions to determine the edge of the viewport could lead to a 'sticking'
         // phenomenom due to the position timings when the part is begin redirected with a negative sub 0 value
         // instead i had to opt to update their positoin by brute force first and move them into the area they are allowed to be in
@@ -115,22 +142,13 @@ function plexusAnimation() {
             p1.y = canvas.height;
             p1.vy *= -0.8;
         }
-
-        if (p1.opacity != p1.targetOpacity) {
-            const delta = p1.targetOpacity - p1.opacity;
-            p1.opacity += p1.targetOpacity * p1.fadeSpeed;
-            p1.opacity = Math.max(0, Math.min(1, p1.opacity));
-        }
-
         
-
-        if (Date.now() - connectionStartTime > connectionDelay) {
-            particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
+        particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
             const dx = p1.x - p2.x;
             const dy = p1.y - p2.y;
             const dist = Math.sqrt(dx*dx + dy*dy); // euclidean distance formula
 
-            let maxDistance = 138;
+            let maxDistance = 150;
 
             if (dist < maxDistance) {
                 ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / maxDistance})`;
@@ -140,19 +158,32 @@ function plexusAnimation() {
                 ctx.stroke();
             }
             });
-        }
-        
 
         ctx.fillStyle = `rgba(255, 255, 255, ${p1.opacity})`;
         ctx.beginPath();
-        ctx.arc(p1.x, p1.y, 2, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
+        ctx.arc(p1.x, p1.y, 0, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
         ctx.fill();
+
+        
     });
+
+    if (fadeOverlayOpacity > 0) {
+            ctx.fillStyle = `rgba(0, 0, 0, ${fadeOverlayOpacity})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            fadeOverlayOpacity -= fadeSpeed;
+        }
 
     requestAnimationFrame(plexusAnimation);
 }
 
 plexusAnimation();
+
+function updateDisplay() {
+    const display = document.querySelector('.calculator-grid-display');
+    display.innerHTML = '';
+
+    const span = document.createElement
+}
 
 const thanosSnap = document.getElementById('display-clear');
 
