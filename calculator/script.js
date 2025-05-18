@@ -36,8 +36,14 @@ document.getElementById('multiplication').addEventListener('click', () => {
 });
 
 document.getElementById('addition').addEventListener('click', () => {
-    if (/\d/.test(display.textContent)) {
+    if (/\d/.test(operand1) && !/\d/.test(display.textContent)) { // something in OP1 - nothing on SCREEN > swap OPERATOR
+        operator = addition;
+    } else if (!/\d/.test(operand1) && /\d/.test(display.textContent)) { // nothing in OP1 - something on SCREEN > fill OP1 & OPERATOR
         operand1 = currentValue;
+        operator = addition;
+        display.innerHTML = '';
+        currentValue = '';
+    } else if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
         operator = addition;
         display.innerHTML = '';
         currentValue = '';
@@ -47,27 +53,54 @@ document.getElementById('addition').addEventListener('click', () => {
 let result = null;
 
 document.getElementById('subtraction').addEventListener('click', () => {
-    // if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
-    //     operand2 = currentValue;
-    //     display.innerHTML = operate(parseFloat(operand1), parseFloat(operand2), operator);
-    //     operand1 = display.innerHTML;
-    //     operand2 = null;
-    // } else if (/\d/.test(operand1) && !/\d/.test(display.textContent)) {
+    const hasOp1 = /\d/.test(operand1);
+    const hasDisplay = /\d/.test(display.textContent);
+
+    if (hasOp1 && !hasDisplay) {
+        operator = subtraction;
+    } else if (!hasOp1 && hasDisplay) {
+        operand1 = display.textContent;
+        operator = subtraction;
+        display.innerHTML = '';
+        currentValue = '';
+    } else if (hasOp1 && hasDisplay) {
+        operator = subtraction;
         
-    //     operator = subtraction;
-    // } else if (/\d/.test(display.textContent)) {
-    //     operand1 = currentValue;
-    //     operator = subtraction;
-    //     display.innerHTML = '';
-    //     currentValue = '';
-    // }
-    if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
-        operand2 = currentValue;
-        display.innerHTML = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        operand1 = display.innerHTML;
-        operand2 = null;
+        display.innerHTML = '';
+        currentValue = ''
+    }
 });
 
+// document.getElementById('subtraction').addEventListener('click', () => {
+//     if (/\d/.test(operand1) && !/\d/.test(display.textContent)) { // something in OP1 - nothing on SCREEN > swap OPERATOR
+//         operator = subtraction;
+//     } else if (!/\d/.test(operand1) && /\d/.test(display.textContent)) { // nothing in OP1 - something on SCREEN > fill OP1 & OPERATOR
+//         operand1 = currentValue;
+//         operator = subtraction;
+//         display.innerHTML = '';
+//         currentValue = '';
+//     } else if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
+//         operator = subtraction;
+//         display.innerHTML = '';
+//         currentValue = '';
+//     }
+// });
+
+document.getElementById('button-zero').addEventListener('click', () => {
+    const hasOp1 = /\d/.test(operand1);
+    const hasDisplay = /\d/.test(display.textContent);
+    
+    if (hasOp1 && hasDisplay) {
+        operand2 = display.textContent;
+        display.innerHTML = operate(parseFloat(operand1), parseFloat(operand2), operator)
+        currentValue = display.textContent;
+        operand1 = currentValue;
+        operator = null;
+        operand2 = null;
+    } else {
+        return;
+    } 
+});
 
 
 // function valueHolders() {
@@ -111,8 +144,8 @@ calculatorButtons.forEach(btn => {
 equalsButton.addEventListener('click', () => {
     displaySolved.currentTime = 0;
     displaySolved.play();
-
-    // particle logic when solved
+    increaseParticles();
+    
 });
 
 clearButton.addEventListener('click', () => {
@@ -170,13 +203,15 @@ document.getElementById('display-clear').addEventListener('click', () => {
     }
 });
 
-document.getElementById('button-zero').addEventListener('click', () => {
-    if (particleCountMultiplier < 0.0004) {
-        particleCountMultiplier += 0.00005;
-        fadeOverlayOpacity = 1;
-        particleRegeneration();
-    }
-});
+function increaseParticles() {
+    // document.getElementById('button-zero').addEventListener('click', () => {
+        if (particleCountMultiplier < 0.0004) {
+            particleCountMultiplier += 0.00005;
+            fadeOverlayOpacity = 1;
+            particleRegeneration();
+        }
+    // });
+}
 
 particleRegeneration();
 
