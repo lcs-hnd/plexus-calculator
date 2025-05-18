@@ -8,21 +8,80 @@ const multiplication = (a, b) => a * b;
 
 // operators written with arrows functions using implicit returns
 
+let operand1 = null;
+let operand2 = null;
+let operator = null;
+
 function operate(operand1, operand2, operator){
     return operator(operand1, operand2);
 };
 
-function valueHolders(){
-    let operand1 = null;
-    let operand2 = null;
-    let operator = null;
-    if (null) {
-        return operate(operand1, operand2, operator);
+
+document.getElementById('division').addEventListener('click', () => {
+    if (/\d/.test(display.textContent)) {
+        operand1 = currentValue;
+        operator = division;
+        display.innerHTML = '';
+        currentValue = '';
     }
-    else {
-        return "WIP"
+});
+
+document.getElementById('multiplication').addEventListener('click', () => {
+    if (/\d/.test(display.textContent)) {
+        operand1 = currentValue;
+        operator = multiplication;
+        display.innerHTML = '';
+        currentValue = '';
     }
-}
+});
+
+document.getElementById('addition').addEventListener('click', () => {
+    if (/\d/.test(display.textContent)) {
+        operand1 = currentValue;
+        operator = addition;
+        display.innerHTML = '';
+        currentValue = '';
+    }
+});
+
+let result = null;
+
+document.getElementById('subtraction').addEventListener('click', () => {
+    // if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
+    //     operand2 = currentValue;
+    //     display.innerHTML = operate(parseFloat(operand1), parseFloat(operand2), operator);
+    //     operand1 = display.innerHTML;
+    //     operand2 = null;
+    // } else if (/\d/.test(operand1) && !/\d/.test(display.textContent)) {
+        
+    //     operator = subtraction;
+    // } else if (/\d/.test(display.textContent)) {
+    //     operand1 = currentValue;
+    //     operator = subtraction;
+    //     display.innerHTML = '';
+    //     currentValue = '';
+    // }
+    if (/\d/.test(operand1) && /\d/.test(display.textContent)) {
+        operand2 = currentValue;
+        display.innerHTML = operate(parseFloat(operand1), parseFloat(operand2), operator);
+        operand1 = display.innerHTML;
+        operand2 = null;
+});
+
+
+
+// function valueHolders() {
+//     if (/\d/.test(display.textContent)) {
+//         document.getElementById('division').addEventListener('click', () => {
+//             operand1 = currentValue;
+//             operator = division;
+//             display.innerHTML = '';
+//             currentValue = '';
+//         });
+//     }
+// }
+
+
 
 // numpad and operator entry sfx
 
@@ -60,7 +119,9 @@ clearButton.addEventListener('click', () => {
     displayClear.currentTime = 0;
     displayClear.play();
 
-    // particle logic when cleared
+    currentValue = '';
+    display.innerHTML = '';
+
     
 });
 
@@ -167,7 +228,7 @@ function plexusAnimation() {
 
         ctx.fillStyle = `rgba(255, 255, 255, ${p1.opacity})`;
         ctx.beginPath();
-        ctx.arc(p1.x, p1.y, 0, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
+        ctx.arc(p1.x, p1.y, 4, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
         ctx.fill();
 
         if (Math.abs(p1.vx) > 0.1) {
@@ -215,8 +276,6 @@ function updateDisplay(value) {
     display.appendChild(span);
 }
 
-
-
 document.querySelectorAll('.just-numbers').forEach(btn => {
     btn.addEventListener('click', () => {
         const value = btn.textContent;
@@ -224,7 +283,13 @@ document.querySelectorAll('.just-numbers').forEach(btn => {
     });
 });
 
-const thanosSnap = document.getElementById('display-clear');
+document.getElementById('decimal').addEventListener('click', () => {
+    if(display.textContent.includes('.')) return;
+    updateDisplay('.');
+});
+
+
+// const thanosSnap = document.getElementById('display-clear');
 
 // i was going to implement a singularity on the AC point and add in an orbit for the particles but i realized
 // that i need to finish this project first lol
