@@ -29,6 +29,7 @@ function valueHolders(){
 const calculatorButtons = document.querySelectorAll('.button-grid .numbers-and-operators');
 const equalsButton = document.getElementById('button-zero');
 const clearButton = document.getElementById('display-clear');
+const calcNoClearButtons = document.querySelectorAll('.button-grid .just-numbers');
 
 const entryClick = document.getElementById('calculatorClick');
 
@@ -37,12 +38,16 @@ calculatorButtons.forEach(btn => {
         entryClick.currentTime = 0;
         entryClick.play();
 
-        particles.forEach(p => { // 
-              p.vx += (Math.random() - 0.5) * 1.1;
-              p.vy += (Math.random() - 0.5) * 1.1;
-            });         
+        particles.forEach(p => { //
+            if (Math.abs(p.vx) < 0.8){
+                p.vx *= 3;
+                p.vy *= 3;
+            }
+        });         
     });
 });
+
+// display update event listener 
 
 equalsButton.addEventListener('click', () => {
     displaySolved.currentTime = 0;
@@ -75,7 +80,7 @@ window.addEventListener('resize', () => { // uses window global object to resize
     canvas.height=window.innerHeight;
 });
 
-let particleCountMultiplier = 0.0002;
+let particleCountMultiplier = 0.00015;
 
 function particleRegeneration() {
     let particleCount = Math.floor(((window.innerHeight * window.innerWidth) * particleCountMultiplier));
@@ -87,6 +92,7 @@ function particleRegeneration() {
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 0.5, // -0.5 to 0.5 halved for random velocity,
             vy: (Math.random() - 0.5) * 0.5,
+
             // bottom three not used atm
             opacity: 1,
             targetOpacity: 1, 
@@ -96,22 +102,22 @@ function particleRegeneration() {
 }
 
 document.getElementById('display-clear').addEventListener('click', () => {
-    particleCountMultiplier -= 0.00005;
-    fadeOverlayOpacity = 1;
-    particleRegeneration();
+    if (particleCountMultiplier > 0) {
+        particleCountMultiplier -= 0.00005;
+        fadeOverlayOpacity = 1;
+        particleRegeneration();
+    }
 });
 
 document.getElementById('button-zero').addEventListener('click', () => {
-    particleCountMultiplier += 0.00005;
-    fadeOverlayOpacity = 1;
-    particleRegeneration();
+    if (particleCountMultiplier < 0.0004) {
+        particleCountMultiplier += 0.00005;
+        fadeOverlayOpacity = 1;
+        particleRegeneration();
+    }
 });
 
 particleRegeneration();
-
-const calculatorDimensions = document.querySelector('.calculator-display');
-const calculatorBoundaries = calculatorDimensions.getBoundingClientRect();
-
 
 let fadeOverlayOpacity = 1;
 const fadeSpeed = 0.001;
@@ -126,10 +132,10 @@ function plexusAnimation() {
 
         if (p1.x < 0) {
             p1.x = 0;
-            p1.vx *= -0.75;
+            p1.vx *= -1;
         } else if (p1.x > canvas.width) { 
             p1.x = canvas.width;
-            p1.vx *= -0.75;
+            p1.vx *= -1;
         } // both of the the if conditions to determine the edge of the viewport could lead to a 'sticking'
         // phenomenom due to the position timings when the part is begin redirected with a negative sub 0 value
         // instead i had to opt to update their positoin by brute force first and move them into the area they are allowed to be in
@@ -137,10 +143,10 @@ function plexusAnimation() {
 
         if (p1.y < 0) {
             p1.y = 0;
-            p1.vy *= -0.8;
+            p1.vy *= -1;
         } else if (p1.y > canvas.height) {
             p1.y = canvas.height;
-            p1.vy *= -0.8;
+            p1.vy *= -1;
         }
         
         particles.forEach(p2 => { // checks particle against other particles to average out the distance and answer if statement for connections
@@ -157,14 +163,20 @@ function plexusAnimation() {
                 ctx.lineTo(p2.x, p2.y);
                 ctx.stroke();
             }
-            });
+        });
 
         ctx.fillStyle = `rgba(255, 255, 255, ${p1.opacity})`;
         ctx.beginPath();
         ctx.arc(p1.x, p1.y, 0, 0, Math.PI *2); // creates the dots and fill them with the fillStyle color
         ctx.fill();
 
-        
+        if (Math.abs(p1.vx) > 0.1) {
+            p1.vx *= 0.99;
+        }
+        if (Math.abs(p1.vy) > 0.1) {
+            p1.vy *= 0.99; 
+        }
+
     });
 
     if (fadeOverlayOpacity > 0) {
@@ -178,12 +190,39 @@ function plexusAnimation() {
 
 plexusAnimation();
 
-function updateDisplay() {
-    const display = document.querySelector('.calculator-grid-display');
-    display.innerHTML = '';
+const display = document.getElementById('display');
+let currentValue = '';
 
-    const span = document.createElement
+// function updateDisplay(value) {
+//     currentValue = value;
+    
+//     [...currentValue.toString()].forEach((digit, index) => {
+//         const span = document.createElement('span');
+//         span.className = 'display-number';
+//         span.textContent = digit;
+//         span.style.animationDelay = `${index * 0.05}s`;
+//         display.appendChild(span);
+//     });
+// }
+
+function updateDisplay(value) {
+    currentValue += value;
+
+    const span = document.createElement('span');
+    span.className = 'display-number';
+    span.textContent = value;
+    span.style.animationDelay = `0s`; 
+    display.appendChild(span);
 }
+
+
+
+document.querySelectorAll('.just-numbers').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const value = btn.textContent;
+        updateDisplay(value);
+    });
+});
 
 const thanosSnap = document.getElementById('display-clear');
 

@@ -15,34 +15,32 @@
     </video> -->
     <canvas id="plexus"></canvas>
     <div class="calculator-body">
-        <div class="calculator-display">
-        </div>
         <div class="button-grid">
-            <div class="calculator-grid-display">
-                <span class="display-number">123</span>
-            </div>
+            
+            <div class="calculator-grid-display" id="display"></div>
+
             <button id="display-clear">AC</button>
             <button class="numbers-and-operators">+/-</button>
             <button class="numbers-and-operators">%</button>
             <button class="numbers-and-operators">÷</button>
             
-            <button class="numbers-and-operators">7</button>
-            <button class="numbers-and-operators">8</button>
-            <button class="numbers-and-operators">9</button>
+            <button class="just-numbers numbers-and-operators">7</button>
+            <button class="just-numbers numbers-and-operators">8</button>
+            <button class="just-numbers numbers-and-operators">9</button>
             <button class="numbers-and-operators">x</button>
 
-            <button class="numbers-and-operators">4</button>
-            <button class="numbers-and-operators">5</button>
-            <button class="numbers-and-operators">6</button>
+            <button class="just-numbers numbers-and-operators">4</button>
+            <button class="just-numbers numbers-and-operators">5</button>
+            <button class="just-numbers numbers-and-operators">6</button>
             <button class="numbers-and-operators">-</button>
 
-            <button class="numbers-and-operators">1</button>
-            <button class="numbers-and-operators">2</button>
-            <button class="numbers-and-operators">3</button>
+            <button class="just-numbers numbers-and-operators">1</button>
+            <button class="just-numbers numbers-and-operators">2</button>
+            <button class="just-numbers numbers-and-operators">3</button>
             <button class="numbers-and-operators">+</button>
             
-            <button class="numbers-and-operators">0</button>
-            <button class="numbers-and-operators">.</button>
+            <button class="just-numbers numbers-and-operators">0</button>
+            <button class="just-numbers numbers-and-operators">.</button>
             <button id="button-zero">=</button>
             
         </div>
@@ -51,7 +49,6 @@
     <audio id="calculatorClick" src="./sound-fx/entry-sfx.mp3" preload="auto"></audio>
     <audio id="displaySolved" src="./sound-fx/display-solved.wav"></audio>
     <audio id="displayClear" src="./sound-fx/display-clear.mp3"></audio>
-    
     <script src ="script.js"></script>
 </body>
 </html>

@@ -61,7 +61,7 @@ im not sure how to take into account the text size itself*/
 }
 
 .button-grid button:hover {
-    background-color: #48484800;
+    background-color: #d1cece4d;
 }
 
 .button-grid button:active {
@@ -72,12 +72,12 @@ im not sure how to take into account the text size itself*/
 
 .button-grid button {
     padding: 10px;
-    background-color: rgba(59, 57, 57, 0.775);
-    color: rgba(255, 255, 255, 0.916);
+    background-color: rgb(0, 0, 0);
+    color: rgba(255, 255, 255, 0.952);
     cursor: pointer;
 
     /* rounding out the invisible button edges */
-    border: none;
+    border: outset rgba(205, 203, 203, 0.297) ;
     border-radius: 5px;
 
     /* all background and click transitions */
@@ -105,16 +105,13 @@ canvas#plexus {
 
 .calculator-grid-display {
     display: flex;
-    line-height: 10px;
+    line-height: normal;
     justify-content: flex-end;
     align-items: center;
     padding: 1px 10px 0px 16px;
     
-
-
-
-
-    background-color: rgba(59, 57, 57, 0.533);
+    background-color: rgb(0, 0, 0);
+    border: inset rgb(83, 83, 83);
     grid-column: span 4;
     height: 60px;
     border-radius: 5px;
@@ -124,14 +121,21 @@ canvas#plexus {
     font-weight: 400;
     font-style: normal;
     font-size: xx-large;
+
+    flex: 0 0 auto;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
 }
 
 .display-number {
-    display: inline-block;
     opacity: 0;
     transform: translateX(20px);
     animation: slideFaceIn 0.3s ease-out forwards;
+    flex-shrink: 0;
 }
+
 
 @keyframes slideFaceIn {
     to {
@@ -139,3 +143,4 @@ canvas#plexus {
         transform: translateX(0);
     }
 }
+
