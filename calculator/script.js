@@ -1,156 +1,127 @@
-const addition = (a, b) => a + b;
-
-const subtraction = (a, b) => a - b;
-
-const division = (a, b) => a / b;
-
-const multiplication = (a, b) => a * b;
-
-// operators written with arrows functions using implicit returns
-
+// calc declarations
 let operand1 = null;
-let operand2 = null;
 let operator = null;
 let currentValue = '';
-let result = null;
 let shouldResetDisplay = false;
 
-function operate(operand1, operand2, operator){
-    return operator(operand1, operand2);
-};
-
-
-
-document.getElementById('subtraction').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const value
-    })
-})
-
-
-// addEventListener('click', () => {
-//     const hasOp1 = /\d/.test(operand1);
-//     const hasDisplay = /\d/.test(display.textContent);
-
-//     if (justEvaluated) {
-//         operand1 = display.textContent;
-//     }
-
-//     if (hasOp1 && hasDisplay) {
-//         operand2 = display.textContent;
-//         const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-//         display.innerHTML = result;
-//         currentValue = result;
-//         operand1 = result;
-//         operand2 = null;
-//         operator = subtraction;
-//         justEvaluated = true;
-//     } else if (hasOp1 && !hasDisplay) {
-//         operator = subtraction;
-//     } else if (!hasOp1 && hasDisplay) {
-//         operand1 = display.textContent;
-//         operator = subtraction;
-//         display.innerHTML = '';
-//         currentValue = '';
-//     }
-// });
-
-document.getElementById('button-zero').addEventListener('click', () => {
-    const hasOp1 = /\d/.test(operand1);
-    const hasDisplay = /\d/.test(display.textContent);
-    
-    if (hasOp1 && hasDisplay && operator) {
-        operand2 = display.textContent;
-        const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        display.innerHTML = result;
-        currentValue = result;
-        operand1 = result;
-        operand2 = null;
-        operator = null;
-        justEvaluated = true
-    } 
-});
-
-// numpad and operator entry sfx
-
-const calculatorButtons = document.querySelectorAll('.button-grid .numbers-and-operators');
-const equalsButton = document.getElementById('button-zero');
-const clearButton = document.getElementById('display-clear');
-const calcNoClearButtons = document.querySelectorAll('.button-grid .just-numbers');
-
-const entryClick = document.getElementById('calculatorClick');
-
-calculatorButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        entryClick.currentTime = 0;
-        entryClick.play();
-
-        particles.forEach(p => { //
-            if (Math.abs(p.vx) < 0.8){
-                p.vx *= 3;
-                p.vy *= 3;
-            }
-        });         
-    });
-});
-
-// display update event listener 
-
-equalsButton.addEventListener('click', () => {
-    displaySolved.currentTime = 0;
-    displaySolved.play();
-    increaseParticles();
-    
-});
-
-clearButton.addEventListener('click', () => {
-    displayClear.currentTime = 0;
-    displayClear.play();
-
-    currentValue = '';
-    display.innerHTML = '';
-
-    
-});
-
-// const video = document.getElementById('background-video');
-// video.playbackRate = 0.7;
-
-// plexus animation, leaving more comments than usual
-
-const canvas = document.getElementById('plexus'); // grabbing the html element
+// plexus declarations
+let particles = [];
+let particleCountMultiplier = 0.00015; // arbitrary multiplier
+let fadeOverlayOpacity = 1; // initial & transitional fadeaway
+const fadeSpeed = 0.001; // iterated on plexus logic
+const canvas = document.getElementById('plexus');
+const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const ctx = canvas.getContext('2d'); // grabs the 2d rendering context
-
-window.addEventListener('resize', () => { // uses window global object to resize the canvas
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-});
-
-let particleCountMultiplier = 0.00015;
-
+// plexus particle regen command
 function particleRegeneration() {
     let particleCount = Math.floor(((window.innerHeight * window.innerWidth) * particleCountMultiplier));
-    particles = []; // array for the particles
+    particles = []; 
 
-    for (let i = 0; i < particleCount ; i++) { // variable particle count based on canvas width
+    for (let i = 0; i < particleCount ; i++) { 
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 0.5, // -0.5 to 0.5 halved for random velocity,
             vy: (Math.random() - 0.5) * 0.5,
-
-            // bottom three not used atm
-            opacity: 1,
-            targetOpacity: 1, 
-            fadeSpeed: 0.001
+            opacity: 1
         });
     };
 }
 
-document.getElementById('display-clear').addEventListener('click', () => {
+// calculator logic
+const operators = {
+    addition: (a, b) => a + b,
+    subtraction: (a, b) => a - b,
+    division: (a, b) => a / b,
+    multiplication: (a, b) => a * b
+};
+
+function operate(a, b, op) {
+    return op(a, b);
+}
+
+// decimal handling 
+document.getElementById('decimal').addEventListener('click', () => {
+    if(display.textContent.includes('.')) return;
+    updateDisplay('.');
+});
+
+// operator selector and evaluator
+document.querySelectorAll('.operators').forEach(button => {
+    button.addEventListener('click', () => {
+        const opFunction = operators[button.id];
+
+        if (operand1 !== null && operator && currentValue !== '') {
+            const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
+            display.textContent = result;
+            operand1 = result;
+            currentValue = result;
+        } else {
+            operand1 = currentValue;
+        }
+
+        operator = opFunction;
+        shouldResetDisplay = true;
+    });
+});
+
+// pull button meaning and update display
+document.querySelectorAll('.just-numbers').forEach(button => {
+    button.addEventListener('click', () => {
+        const value = button.textContent;
+
+        if(shouldResetDisplay) {
+            display.innerHTML = '';
+            currentValue = '';
+            shouldResetDisplay = false;
+        }
+
+        currentValue += value;
+        const span = document.createElement('span');
+        span.className = 'display-number';
+        span.textContent = value;
+        display.appendChild(span);
+    })
+});
+
+// background clear and solve expression
+const equalsButton = document.getElementById('equals');
+
+equalsButton.addEventListener('click', () => { // expression solved SFX
+    displaySolved.currentTime = 0;
+    displaySolved.play();
+});
+
+equalsButton.addEventListener('click', () => { // multiplier increase and particle regen
+    if (particleCountMultiplier < 0.0004) {
+            particleCountMultiplier += 0.00005;
+            fadeOverlayOpacity = 1;
+            particleRegeneration();
+        }
+});
+
+equalsButton.addEventListener('click', () => {
+    if (operand1 !== null && operator && currentValue !=='') {
+        const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
+        display.textContent = result;
+        operand1 = result;
+        operator = null;
+        currentValue = '';
+        shouldResetDisplay = true;
+    }
+})
+
+// background clear and remove remove expression
+const clearButton = document.getElementById('display-clear'); // AC button
+
+clearButton.addEventListener('click', () => { // clear SFX
+    displayClear.currentTime = 0;
+    displayClear.play();
+});
+
+clearButton.addEventListener('click', () => { // particle reduction and overlay regen
     if (particleCountMultiplier > 0) {
         particleCountMultiplier -= 0.00005;
         fadeOverlayOpacity = 1;
@@ -158,21 +129,33 @@ document.getElementById('display-clear').addEventListener('click', () => {
     }
 });
 
-function increaseParticles() {
-    // document.getElementById('button-zero').addEventListener('click', () => {
-        if (particleCountMultiplier < 0.0004) {
-            particleCountMultiplier += 0.00005;
-            fadeOverlayOpacity = 1;
-            particleRegeneration();
-        }
-    // });
-}
+clearButton.addEventListener('click', () => {
+    operand1 = null;
+    operator = null;
+    currentValue = '';
+    display.innerHTML = '';
+    shouldResetDisplay = false;
+});
 
-particleRegeneration();
+// particle movement burst and sound
+const keypadSFX = document.getElementById('calculatorClick');
+const numbersAndOperators = document.querySelectorAll('.numbers-and-operators');
 
-let fadeOverlayOpacity = 1;
-const fadeSpeed = 0.001;
+numbersAndOperators.forEach(btn => {
+    btn.addEventListener('click', () => {
+        keypadSFX.currentTime = 0;
+        keypadSFX.play();
 
+        particles.forEach(p => { 
+            if (Math.abs(p.vx) < 0.8) {
+                p.vx *= 3;
+                p.vy *= 3;
+            }
+        });  
+    });
+});
+
+// plexus logic
 function plexusAnimation() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // clears canvas to prevent trailing
 
@@ -239,71 +222,13 @@ function plexusAnimation() {
     requestAnimationFrame(plexusAnimation);
 }
 
-plexusAnimation();
+// canvas size updater
+window.addEventListener('resize', () => { 
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
 
 const display = document.getElementById('display');
 
-
-// function updateDisplay(value) {
-//     currentValue = value;
-    
-//     [...currentValue.toString()].forEach((digit, index) => {
-//         const span = document.createElement('span');
-//         span.className = 'display-number';
-//         span.textContent = digit;
-//         span.style.animationDelay = `${index * 0.05}s`;
-//         display.appendChild(span);
-//     });
-// }
-
-function updateDisplay(value) {
-    currentValue += value;
-
-    const span = document.createElement('span');
-    span.className = 'display-number';
-    span.textContent = value;
-    span.style.animationDelay = `0s`; 
-    display.appendChild(span);
-}
-
-document.querySelectorAll('.just-numbers').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const value = btn.textContent;
-        updateDisplay(value);
-    });
-});
-
-document.getElementById('decimal').addEventListener('click', () => {
-    if(display.textContent.includes('.')) return;
-    updateDisplay('.');
-});
-
-
-// const thanosSnap = document.getElementById('display-clear');
-
-// i was going to implement a singularity on the AC point and add in an orbit for the particles but i realized
-// that i need to finish this project first lol
-// i'll pick this up right after in a separate repo where i can expose the variables into a proper simulator
-
-// // AC Code
-
-// let center = { x: canvas.width / 2, y: canvas.height / 2 };
-// let angle = Math.atan2(p.y - center.y, p.x - center.x);
-// let speed = 0.5;
-
-// p.vx += Math.cos(angle) * speed * Math.random();
-// p.vx += Math.sin(angle) * speed * Math.random();
-
-
-// // Death by singularity
-
-// const singularity = document.getElementById('display-clear');
-// const singularityRect = singularity.getBoundingClientRect();
-// const singularityCenter = {
-//     x: singularityRect.left + singularityRect.width / 2, 
-//     y: singularityRect.top + singularityRect.height /2
-// };
-
-
-
-
+plexusAnimation();
+particleRegeneration();
