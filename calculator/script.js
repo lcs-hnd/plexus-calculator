@@ -13,139 +13,47 @@ let operand2 = null;
 let operator = null;
 let currentValue = '';
 let result = null;
-let justEvaluated = false;
+let shouldResetDisplay = false;
 
 function operate(operand1, operand2, operator){
     return operator(operand1, operand2);
 };
 
-document.getElementById('division').addEventListener('click', () => {
-    const hasOp1 = /\d/.test(operand1);
-    const hasDisplay = /\d/.test(display.textContent);
 
-    if (justEvaluated) {
-        operand1 = display.textContent;
-        operator = division;
-        display.innerHTML = '';
-        currentValue = '';
-        justEvaluated = false;
-        return;
-    }
 
-    if (hasOp1 && !hasDisplay) { // change of operators
-        operator = division;
-    } else if (!hasOp1 && hasDisplay) { // type next number
-        operand1 = display.textContent;
-        operator = division;
-        display.innerHTML = '';
-        currentValue = '';
-    } else if (hasOp1 && hasDisplay) { // 
-        operand2 = display.textContent;
-        const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        display.innerHTML = result;
-        currentValue = result;
-        operand1 = result;
-        operand2 = null;
-        operator = division;
-        justEvaluated = true;
-    }
-});
+document.getElementById('subtraction').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const value
+    })
+})
 
-document.getElementById('addition').addEventListener('click', () => {
-    const hasOp1 = /\d/.test(operand1);
-    const hasDisplay = /\d/.test(display.textContent);
 
-    if (justEvaluated) {
-        operand1 = display.textContent;
-        operator = addition;
-        display.innerHTML = '';
-        currentValue = '';
-        justEvaluated = false;
-        return;
-    }
+// addEventListener('click', () => {
+//     const hasOp1 = /\d/.test(operand1);
+//     const hasDisplay = /\d/.test(display.textContent);
 
-    if (hasOp1 && !hasDisplay) { // change of operators
-        operator = addition;
-    } else if (!hasOp1 && hasDisplay) { // type next number
-        operand1 = display.textContent;
-        operator = addition;
-        display.innerHTML = '';
-        currentValue = '';
-    } else if (hasOp1 && hasDisplay) { // 
-        operand2 = display.textContent;
-        const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        display.innerHTML = result;
-        currentValue = result;
-        operand1 = result;
-        operand2 = null;
-        operator = addition;
-        justEvaluated = true;
-    }
-});
+//     if (justEvaluated) {
+//         operand1 = display.textContent;
+//     }
 
-document.getElementById('multiplication').addEventListener('click', () => {
-    const hasOp1 = /\d/.test(operand1);
-    const hasDisplay = /\d/.test(display.textContent);
-
-    if (justEvaluated) {
-        operand1 = display.textContent;
-        operator = multiplication;
-        display.innerHTML = '';
-        currentValue = '';
-        justEvaluated = false;
-        return;
-    }
-
-    if (hasOp1 && !hasDisplay) { // change of operators
-        operator = multiplication;
-    } else if (!hasOp1 && hasDisplay) { // type next number
-        operand1 = display.textContent;
-        operator = multiplication;
-        display.innerHTML = '';
-        currentValue = '';
-    } else if (hasOp1 && hasDisplay) { // 
-        operand2 = display.textContent;
-        const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        display.innerHTML = result;
-        currentValue = result;
-        operand1 = result;
-        operand2 = null;
-        operator = multiplication;
-        justEvaluated = true;
-    }
-});
-
-document.getElementById('subtraction').addEventListener('click', () => {
-    const hasOp1 = /\d/.test(operand1);
-    const hasDisplay = /\d/.test(display.textContent);
-
-    if (justEvaluated) {
-        operand1 = display.textContent;
-        operator = subtraction;
-        display.innerHTML = '';
-        currentValue = '';
-        justEvaluated = false;
-        return;
-    }
-
-    if (hasOp1 && !hasDisplay) { // change of operators
-        operator = subtraction;
-    } else if (!hasOp1 && hasDisplay) { // type next number
-        operand1 = display.textContent;
-        operator = subtraction;
-        display.innerHTML = '';
-        currentValue = '';
-    } else if (hasOp1 && hasDisplay) { // 
-        operand2 = display.textContent;
-        const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
-        display.innerHTML = result;
-        currentValue = result;
-        operand1 = result;
-        operand2 = null;
-        operator = subtraction;
-        justEvaluated = true;
-    }
-});
+//     if (hasOp1 && hasDisplay) {
+//         operand2 = display.textContent;
+//         const result = operate(parseFloat(operand1), parseFloat(operand2), operator);
+//         display.innerHTML = result;
+//         currentValue = result;
+//         operand1 = result;
+//         operand2 = null;
+//         operator = subtraction;
+//         justEvaluated = true;
+//     } else if (hasOp1 && !hasDisplay) {
+//         operator = subtraction;
+//     } else if (!hasOp1 && hasDisplay) {
+//         operand1 = display.textContent;
+//         operator = subtraction;
+//         display.innerHTML = '';
+//         currentValue = '';
+//     }
+// });
 
 document.getElementById('button-zero').addEventListener('click', () => {
     const hasOp1 = /\d/.test(operand1);
