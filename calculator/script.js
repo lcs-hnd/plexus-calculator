@@ -39,6 +39,14 @@ const operators = {
 };
 
 function operate(a, b, op) {
+    if (op === operators.division && b === 0) {
+        display.textContent = 'sybau 🥀🥀';
+        operand1 = null;
+        operator = null;
+        currentValue = '';
+        shouldResetDisplay = true;
+        return;
+    }
     return op(a, b);
 }
 
@@ -98,7 +106,7 @@ document.querySelectorAll('.just-numbers').forEach(button => {
     })
 });
 
-// background clear and solve expression
+// background clear and equals button
 const equalsButton = document.getElementById('equals');
 
 equalsButton.addEventListener('click', () => { // expression solved SFX
