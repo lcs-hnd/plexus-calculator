@@ -39,14 +39,6 @@ const operators = {
 };
 
 function operate(a, b, op) {
-    if (op === operators.division && b === 0) {
-        display.textContent = 'sybau 🥀🥀';
-        operand1 = null;
-        operator = null;
-        currentValue = '';
-        shouldResetDisplay = true;
-        return;
-    }
     return op(a, b);
 }
 
@@ -75,10 +67,22 @@ document.querySelectorAll('.operators').forEach(button => {
 
         if (operand1 !== null && operator && currentValue !== '') {
             const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
+
+            if (result === Infinity || isNaN(result)) {
+                display.textContent = 'Kevin: Yoghurt';
+                setTimeout(() => {
+                    display.textContent = '';
+                }, 1000);
+                operand1 = null;
+                operator = null;
+                currentValue = '';
+                return;
+            }
+
             display.textContent = result;
             operand1 = result;
             currentValue = result;
-        } else if (currentValue !== '') {
+        } else {
             operand1 = currentValue;
         }
 
@@ -123,11 +127,22 @@ equalsButton.addEventListener('click', () => { // multiplier increase and partic
 });
 
 equalsButton.addEventListener('click', () => {
-    if (operand1 !== null && operator && currentValue !=='') {
+    if (operand1 !== null && operator && currentValue !== '') {
         const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
+
+        if (result === Infinity || isNaN(result)) {
+            display.textContent = 'sybau 🥀🥀';
+            setTimeout(() => {
+                display.textContent = '';
+            }, 2000);
+            operand1 = null;
+            operator = null;
+            currentValue = '';
+            return;
+        }
+
         display.textContent = result;
         operand1 = result;
-        operator = null;
         currentValue = '';
         shouldResetDisplay = true;
     }
