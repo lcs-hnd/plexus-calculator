@@ -44,9 +44,21 @@ function operate(a, b, op) {
 
 // decimal handling 
 document.getElementById('decimal').addEventListener('click', () => {
-    if(display.textContent.includes('.')) return;
-    updateDisplay('.');
+    if (shouldResetDisplay) {
+        display.innerHTML = '';
+        currentValue = '';
+        shouldResetDisplay = false;
+    }
+
+    if (!currentValue.includes('.')) {
+        currentValue += '.';
+        const span = document.createElement('span');
+        span.className = 'display-number';
+        span.textContent = '.';
+        display.appendChild(span);
+    }
 });
+
 
 // operator selector and evaluator
 document.querySelectorAll('.operators').forEach(button => {
@@ -58,7 +70,7 @@ document.querySelectorAll('.operators').forEach(button => {
             display.textContent = result;
             operand1 = result;
             currentValue = result;
-        } else {
+        } else if (currentValue !== '') {
             operand1 = currentValue;
         }
 
