@@ -65,11 +65,19 @@ document.querySelectorAll('.operators').forEach(button => {
     button.addEventListener('click', () => {
         const opFunction = operators[button.id];
 
+        if (currentValue === '') return;
+
+        if (operator && shouldResetDisplay) {
+            operator = opFunction;
+            return;
+        }
+
+        // evaluate expression only if we have two numbers and an operator
         if (operand1 !== null && operator && currentValue !== '') {
             const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
 
             if (result === Infinity || isNaN(result)) {
-                display.textContent = 'Kevin: Yoghurt';
+                display.textContent = 'sybau 🥀🥀';
                 setTimeout(() => {
                     display.textContent = '';
                 }, 1000);
@@ -90,6 +98,7 @@ document.querySelectorAll('.operators').forEach(button => {
         shouldResetDisplay = true;
     });
 });
+
 
 // pull button meaning and update display
 document.querySelectorAll('.just-numbers').forEach(button => {
@@ -118,13 +127,29 @@ equalsButton.addEventListener('click', () => { // expression solved SFX
     displaySolved.play();
 });
 
-equalsButton.addEventListener('click', () => { // multiplier increase and particle regen
-    if (particleCountMultiplier < 0.0004) {
-            particleCountMultiplier += 0.00005;
-            fadeOverlayOpacity = 1;
-            particleRegeneration();
+equalsButton.addEventListener('click', () => {
+    if (operand1 !== null && operator && currentValue !== '') {
+        const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
+
+        if (result === Infinity || isNaN(result)) {
+            display.textContent = 'sybau 🥀🥀';
+            setTimeout(() => {
+                display.textContent = '';
+            }, 1000);
+            operand1 = null;
+            operator = null;
+            currentValue = '';
+            return;
         }
+
+        display.textContent = result;
+        operand1 = result;
+        currentValue = '';
+        operator = null;
+        shouldResetDisplay = true;
+    }
 });
+
 
 equalsButton.addEventListener('click', () => {
     if (operand1 !== null && operator && currentValue !== '') {
