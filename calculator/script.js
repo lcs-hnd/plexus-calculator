@@ -122,12 +122,21 @@ document.querySelectorAll('.just-numbers').forEach(button => {
 // background clear and equals button
 const equalsButton = document.getElementById('equals');
 
+equalsButton.addEventListener('click', () => { // particle increase and overlay regen
+    if (particleCountMultiplier < 0.0004) {
+        particleCountMultiplier += 0.00005;
+        fadeOverlayOpacity = 1;
+        particleRegeneration();
+    }
+});
+
 equalsButton.addEventListener('click', () => { // expression solved SFX
     displaySolved.currentTime = 0;
     displaySolved.play();
 });
 
 equalsButton.addEventListener('click', () => {
+
     if (operand1 !== null && operator && currentValue !== '') {
         const result = operate(parseFloat(operand1), parseFloat(currentValue), operator);
 
@@ -144,9 +153,19 @@ equalsButton.addEventListener('click', () => {
 
         display.textContent = result;
         operand1 = result;
-        currentValue = '';
+        currentValue = result.toString();
         operator = null;
         shouldResetDisplay = true;
+    } else if (operand1 == null && !operator && currentValue == '404'){
+        canvas.style.display = 'none';
+        const video = document.getElementById('easterEgg404');
+        video.classList.remove('hidden');
+        video.play();
+        operand1 = null;
+        operator = null;
+        currentValue = '';
+        display.innerHTML = '';
+        shouldResetDisplay = false;
     }
 });
 

@@ -14,7 +14,7 @@ html, body {
 
 .calculator-body {
     position: relative;
-    background-color: rgba(0, 0, 0, 0.158);
+    background-color: rgba(0, 0, 0, 0);
     /* border: solid #615f5f67; */
     /* border-radius: 6px; */
     padding: 10px;
@@ -41,7 +41,7 @@ html, body {
 
 .button-grid button {
     padding: 10px;
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.8);
     color: rgba(255, 255, 255, 0.952);
     cursor: pointer;
 
@@ -79,7 +79,7 @@ canvas#plexus {
     align-items: center;
     padding: 1px 10px 0px 16px;
     
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0, 0.9);
     border: inset rgb(83, 83, 83);
     grid-column: span 4;
     height: 60px;
@@ -113,3 +113,16 @@ canvas#plexus {
     }
 }
 
+.hidden {
+  display: none;
+}
+
+#easterEgg404 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+}
