@@ -80,7 +80,7 @@ canvas#plexus {
     padding: 1px 10px 0px 16px;
     
     background-color: rgb(0, 0, 0, 0.9);
-    border: inset rgb(83, 83, 83);
+    border: outset rgb(83, 83, 83);
     grid-column: span 4;
     height: 60px;
     border-radius: 5px;
