@@ -1,4 +1,1 @@
-to do --
-flesh out % and +/- signs
-shorten equals audio 
-refactor with framework
+## WIP: Will be completely refactored in due time with a framework.
